@@ -6,4 +6,4 @@
  <p><i>Visual Studio Community 2022</i></p>
 
  <h3>System Design</h3>
- <p>![image](https://github.com/user-attachments/assets/5d8db6f9-10cc-4785-99d5-dd55cbeca026)</p>
+ ![image](https://github.com/user-attachments/assets/5d8db6f9-10cc-4785-99d5-dd55cbeca026)
