@@ -1,65 +1,133 @@
 ﻿@model StokTakipSistemi.Models.STOK_HAREKET
 @{
-    ViewBag.Title = "StokHareketGuncelle";
+    ViewBag.Title = "Stok Hareketi Güncelle";
 }
 
-<h2>StokHareketGuncelle</h2>
+<h2 class="page-title">Stok Hareketi Güncelle</h2>
 
-
-@using (Html.BeginForm("StokHareketGuncelle", "DepoYetkilisi", FormMethod.Post))
-{
-    @Html.HiddenFor(x => x.HAREKET_ID)
-
-    <div class="form-group">
-        @Html.Label("Stok Seçiniz")
-        @Html.DropDownList("STOK_ID", (SelectList)ViewBag.stoklar,  new { @class = "form-control", @placeholder = "-- Stok Seçiniz --" })
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Depo Seçiniz")
-        @Html.DropDownList("DEPO_ESLESTIRME_ID", (SelectList)ViewBag.eslesmeler,  new { @class = "form-control", @placeholder = "-- Depo Eşleşmesi Seçiniz --" })
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Sorumlu Seçiniz")
-        @Html.DropDownList("SORUMLU_ID", (SelectList)ViewBag.sorumlular,  new { @class = "form-control", @placeholder = "-- Sorumlu Seçiniz --" })
-    </div>
-
-    <div class="form-group">
-        <label style="font-size:16px;"><b>Hareket Tipi</b></label>
-
-        @Html.TextBoxFor(m => m.HAREKET_TIP, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.HAREKET_TIP, "", new { @class = "text-danger" })
-    </div>
-    <div class="form-group">
-        <label style="font-size:16px;"><b>Açıklama</b></label>
-
-        @Html.TextBoxFor(m => m.ACIKLAMA, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.ACIKLAMA, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group">
-        <label style="font-size:16px;"><b>Hareket Miktarı</b></label>
-
-        @Html.TextBoxFor(m => m.HAREKET_MIKTAR, new { @class = "form-control", pattern = @"\d+(\.\d+)?|\d+(,\d+)?", title = "Decimal number with dot or comma" })
-        @Html.ValidationMessageFor(model => model.HAREKET_MIKTAR, "", new { @class = "text-danger" })
-    </div>
-    <div class="form-group">
-        <label style="font-size:16px;"><b>Hareket Tarihi</b></label>
-
-        @Html.TextBoxFor(m => m.HAREKET_TARIHI, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.HAREKET_TARIHI, "", new { @class = "text-danger" })
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Stok Hareketini Güncelle</button>
-    </div>
-    <div>
-        <button class="btn btn-warning" onclick="location.href='@Url.Action("DepoSayfasi", "DepoYetkilisi")'; return false;">İptal Et</button>
-    </div>
-    if (TempData["ErrorMessage"] != null)
+<div class="form-container">
+    @using (Html.BeginForm("StokHareketGuncelle", "DepoYetkilisi", FormMethod.Post))
     {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        @Html.HiddenFor(x => x.HAREKET_ID)
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Stok Seçiniz", new { @class = "form-label" })
+                    @Html.DropDownList("STOK_ID", (SelectList)ViewBag.stoklar, new { @class = "form-control", @placeholder = "-- Stok Seçiniz --" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Depo Seçiniz", new { @class = "form-label" })
+                    @Html.DropDownList("DEPO_ESLESTIRME_ID", (SelectList)ViewBag.eslesmeler, new { @class = "form-control", @placeholder = "-- Depo Eşleşmesi Seçiniz --" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Hareket Tipi", new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.HAREKET_TIP, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.HAREKET_TIP, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Hareket Tarihi", new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.HAREKET_TARIHI, new { @class = "form-control", type = "date" })
+                    @Html.ValidationMessageFor(model => model.HAREKET_TARIHI, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Sorumlu Seçiniz", new { @class = "form-label" })
+                    @Html.DropDownList("SORUMLU_ID", (SelectList)ViewBag.sorumlular, new { @class = "form-control", @placeholder = "-- Sorumlu Seçiniz --" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Açıklama", new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.ACIKLAMA, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ACIKLAMA, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Hareket Miktarı", new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.HAREKET_MIKTAR, new { @class = "form-control", pattern = @"\d+(\.\d+)?|\d+(,\d+)?", title = "Decimal number with dot or comma" })
+                    @Html.ValidationMessageFor(model => model.HAREKET_MIKTAR, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Stok Hareketini Güncelle</button>
+            <button class="btn btn-warning" onclick="location.href='@Url.Action("StokHareketiSayfasi", "DepoYetkilisi")'; return false;">İptal Et</button>
+        </div>
+
+        if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center">@TempData["ErrorMessage"]</div>
+        }
     }
-}
+</div>
 
+<style>
+    .page-title {
+        text-align: center;
+        color: #005f73;
+        margin-bottom: 20px;
+    }
 
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    .form-label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: #333;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        margin-left: 10px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0069d9;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    .text-danger {
+        font-size: 14px;
+    }
+
+    .alert {
+        margin-top: 15px;
+    }
+</style>

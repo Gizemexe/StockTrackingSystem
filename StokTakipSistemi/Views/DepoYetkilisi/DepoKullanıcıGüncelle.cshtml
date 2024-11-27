@@ -2,112 +2,160 @@
 @{
     ViewBag.Title = "Kullanıcı Güncelle";
 }
-
-<body>
-    <br />
-    <br />
-    <br />
-    @using (Html.BeginForm("DepoKullanıcıGüncelle", "DepoYetkilisi", FormMethod.Post))
-    {
-        @Html.HiddenFor(x => x.KUL_ID)
-
-        <div style="margin-bottom:295px">
-            <h2 style="margin-left:155px; font-size:30px;"><b>Kullanıcı Profili</b></h2>
-            <br />
-            <table class="tbl">
-                <tr>
-                    <th>
-                        <label style="font-size:14px">Username: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.KUL_USERNAME, new { @class = "form-control", @placeholder = "Username..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size:14px">First Name: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.KUL_AD, new { @class = "form-control", @placeholder = "Ad..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size:14px">Last name: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.KUL_SOYAD, new { @class = "form-control", @placeholder = "Soyad..." })
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Kullanıcı Tip: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.KUL_TIP, new { @class = "form-control", @readonly = true, @placeholder = "Tip..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Password: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.KUL_SIFRE, new { @class = "form-control", @placeholder = "Password..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Statü: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.STATU, new { @class = "form-control", @placeholder = "Statü..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Creator: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.OLUSTURAN_KULLANICI, new { @class = "form-control", @readonly = true, @placeholder = "Creator..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Creation Date: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.OLUSTURMA_TARIHI, new { @class = "form-control", @readonly = true, @placeholder = "Creation Date..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Updater: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.GUNCELLEYEN_KULLANICI, new { @class = "form-control", @readonly = true, @placeholder = "Updater..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size:14px">Update Date: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.GUNCELLEME_TARIHI, new { @class = "form-control", @readonly = true, @placeholder = "Update Date..." })
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <br />
-                        <input type="submit" value="Update" class="btn btn-danger" />
-                    </td>
-                    <td>
-                        <br />
-                        <button class="btn btn-warning" onclick="location.href='@Url.Action("DepoSayfasi", "DepoYetkilisi")'; return false;">Cancel</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
+<style>
+    .page-title {
+        font-size: 2em;
+        font-weight: bold;
+        color: #005f73;
+        margin-bottom: 20px;
+        text-align: center;
     }
-</body>
+
+    .form-container {
+        display: flex;
+        justify-content: space-between;
+        max-width: 1000px; /* Genişliği artırdık */
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        gap: 50px; /* Sütunlar arası boşluk eklendi */
+    }
+
+    .form-column {
+        width: 45%; /* Sütun genişlikleri ayarlandı */
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #005f73;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            border-color: #0a9396;
+            outline: none;
+        }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px; /* Butonlar arasındaki boşluğu küçülttük */
+        margin-top: 20px;
+        width: 100%;
+        padding-top: 15px;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 8px 16px; /* Buton içindeki boşlukları küçülttük */
+        border-radius: 5px;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 14px; /* Font boyutunu küçülttük */
+        min-width: 120px; /* Minimum buton genişliğini azalttık */
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #005f73;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9396;
+        }
+
+    .btn-secondary {
+        background-color: #d9534f;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #c9302c;
+        }
+
+
+</style>
+
+<h2 class="page-title">Kullanıcı Profili Güncelle</h2>
+
+@using (Html.BeginForm("DepoKullanıcıGüncelle", "DepoYetkilisi", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.KUL_ID)
+
+    <div class="form-container">
+        <div class="form-column">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                @Html.TextBoxFor(x => x.KUL_USERNAME, new { @class = "form-control", @placeholder = "Username..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">First Name</label>
+                @Html.TextBoxFor(x => x.KUL_AD, new { @class = "form-control", @placeholder = "Ad..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Last Name</label>
+                @Html.TextBoxFor(x => x.KUL_SOYAD, new { @class = "form-control", @placeholder = "Soyad..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Kullanıcı Tip</label>
+                @Html.TextBoxFor(x => x.KUL_TIP, new { @class = "form-control", @readonly = true, @placeholder = "Tip..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                @Html.TextBoxFor(x => x.KUL_SIFRE, new { @class = "form-control", @placeholder = "Password..." })
+            </div>
+        </div>
+
+        <div class="form-column">
+            <div class="form-group">
+                <label class="form-label">Statü</label>
+                @Html.TextBoxFor(x => x.STATU, new { @class = "form-control", @placeholder = "Statü..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Creator</label>
+                @Html.TextBoxFor(x => x.OLUSTURAN_KULLANICI, new { @class = "form-control", @readonly = true, @placeholder = "Creator..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Creation Date</label>
+                @Html.TextBoxFor(x => x.OLUSTURMA_TARIHI, new { @class = "form-control", @readonly = true, @placeholder = "Creation Date..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Updater</label>
+                @Html.TextBoxFor(x => x.GUNCELLEYEN_KULLANICI, new { @class = "form-control", @readonly = true, @placeholder = "Updater..." })
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Update Date</label>
+                @Html.TextBoxFor(x => x.GUNCELLEME_TARIHI, new { @class = "form-control", @readonly = true, @placeholder = "Update Date..." })
+            </div>
+            <div class="form-group button-group">
+                <input type="submit" value="Güncelle" class="btn btn-primary" />
+                <button class="btn btn-secondary" onclick="location.href='@Url.Action("DepoSayfasi", "DepoYetkilisi")'; return false;">İptal</button>
+            </div>
+        </div>
+        </div>
+}

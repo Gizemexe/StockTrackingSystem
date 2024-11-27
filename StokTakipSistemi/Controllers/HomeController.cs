@@ -10,6 +10,17 @@ namespace StokTakipSistemi.Controllers
     {
         public ActionResult Index()
         {
+            var userRole = Convert.ToInt32(Session["KulTIP"]); // Varsayılan olarak 'Guest' olarak kabul ediyoruz
+
+            // Eğer depo yetkilisi (Role ID = 2) ise özel görünüme yönlendirme
+            if (userRole == 2)
+            {
+                return View("WarehouseManagerView");
+            }
+            else
+            {
+                return View("Index");
+            }
             return View();
         }
 

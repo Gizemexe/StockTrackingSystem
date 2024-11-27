@@ -747,15 +747,15 @@ namespace StokTakipSistemi.Controllers
         {
 
 
-            var currentUser = db.STOK.Find(id);
-            
-            currentUser.STOK_AD = stokNow.STOK_AD;
-            currentUser.STOK_OLCUBIRIM = stokNow.STOK_OLCUBIRIM;
-            currentUser.STOK_MARKA = stokNow.STOK_MARKA;
-            currentUser.STOK_DETAY = stokNow.STOK_DETAY;
-            currentUser.KAYIT_TARIHI = stokNow.KAYIT_TARIHI;
-            currentUser.MIN_MIKTAR = stokNow.MIN_MIKTAR;
-            currentUser.STATU = stokNow.STATU;
+            var currentStok = db.STOK.Find(id);
+
+            currentStok.STOK_AD = stokNow.STOK_AD;
+            currentStok.STOK_OLCUBIRIM = stokNow.STOK_OLCUBIRIM;
+            currentStok.STOK_MARKA = stokNow.STOK_MARKA;
+            currentStok.STOK_DETAY = stokNow.STOK_DETAY;
+            currentStok.KAYIT_TARIHI = stokNow.KAYIT_TARIHI;
+            currentStok.MIN_MIKTAR = stokNow.MIN_MIKTAR;
+            currentStok.STATU = stokNow.STATU;
 
             if (string.IsNullOrEmpty(stokNow.STOK_AD) || string.IsNullOrEmpty(stokNow.STOK_OLCUBIRIM.ToString()) || string.IsNullOrEmpty(stokNow.STOK_DETAY) || string.IsNullOrEmpty(stokNow.STOK_MARKA)
               || string.IsNullOrEmpty(stokNow.KAYIT_TARIHI.ToString()) || string.IsNullOrEmpty(stokNow.MIN_MIKTAR.ToString()) || string.IsNullOrEmpty(stokNow.STATU.ToString()))
@@ -765,8 +765,8 @@ namespace StokTakipSistemi.Controllers
             }
             else
             {
-                var existingUser = db.STOK.FirstOrDefault(u => u.STOK_AD == stokNow.STOK_AD);
-                if (existingUser != null && existingUser.STOK_AD != currentUser.STOK_AD)
+                var existingDepo = db.STOK.FirstOrDefault(u => u.STOK_AD == stokNow.STOK_AD);
+                if (existingDepo != null && existingDepo.STOK_AD != currentStok.STOK_AD)
                 {
                     ViewBag.ErrorMessage = "Bu stok adı kullanılmaktadır!";
                     return View();

@@ -1,10 +1,116 @@
 ﻿@using StokTakipSistemi.Models
 @model IEnumerable<STOK_HAREKET>
+
 @{
     ViewBag.Title = "Stok Hareketi Listesi";
+    int counter = 1;
 }
 
-<h2>Stok Hareketi Sayfasi</h2>
+<style>
+    .page-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #005f73;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .action-buttons {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .action-buttons-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .action-btn {
+        margin-right: 10px; /* Butonlar arasına boşluk ekler */
+    }
+
+    .search-container {
+        flex: 1;
+        max-width: 600px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #005f73;
+        border-color: #005f73;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9396;
+            border-color: #0a9396;
+        }
+
+    .btn-danger {
+        background-color: #d9534f;
+        border-color: #d9534f;
+    }
+
+        .btn-danger:hover {
+            background-color: #c9302c;
+            border-color: #c9302c;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 12px 15px;
+            font-size: 1.1em;
+        }
+
+        .table th {
+            background-color: #005f73;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    .table-actions {
+        display: flex;
+        justify-content: center;
+    }
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e0f7fa;
+    }
+</style>
+
+<h2 class="page-title">Stok Hareketi Listesi</h2>
 
 <div id="notification" class="alert alert-success" style="display: none;">
     @if (TempData["SuccessMessage"] != null)
@@ -17,149 +123,90 @@
     }
 </div>
 
-@using (Html.BeginForm("StokHareketiSayfasi", "DepoYetkilisi", FormMethod.Get))
-{
-    <div class="button-container">
-        @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
-    </div>
-}
-
-@using (Html.BeginForm("StokHareketiEkle", "DepoYetkilisi", FormMethod.Post))
-{
-    <div class="button-container" style="float: left;">
-        <button type="submit" class="btn btn-success">Stok Hareketi Ekle</button>
-    </div>
-}
-
-<style>
-
-    .search-input {
-        width: 250px; /* Adjust the width of the input field as needed */
-        margin-right: 5px; /* Optional: Add some space between input field and button */
+<div class="action-buttons">
+    @using (Html.BeginForm("StokHareketiSayfasi", "DepoYetkilisi", FormMethod.Get))
+    {
+        <div class="search-container">
+            @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
+        </div>
     }
-</style>
 
-<br />
-
-@using (Html.BeginForm("ExportToStokHareketExcel", "DepoYetkilisi", FormMethod.Post))
-{
-    <div class="button-container" style="float: right;">
+    @using (Html.BeginForm("ExportToStokHareketExcel", "DepoYetkilisi", FormMethod.Post))
+    {
         <button type="submit" class="btn btn-success">Excel'e Aktar</button>
-    </div>
-}
+    }
+</div>
 
-
-
-<table class="table">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>Hareket ID</th>
-            <th>Stok ID</th>
-            <th>Depo Eşleştirme ID </th>
-            <th>Sorumlu ID </th>
-            <th>Hareket Tip </th>
-            <th>Açıklama </th>
-            <th>Hareket Miktar </th>
-            <th>Hareket Tarihi </th>
-            <th>Oluşturan Kullanıcı</th>
+            <th>#</th>
+            <th>Stok Adı</th>
+            <th>Sorumlu Adı</th>
+            <th>Depo Adı</th>
+            <th>Açıklama</th>
+            <th>Miktar</th>
+            <th>Hareket Tarihi</th>
             <th>Oluşturma Tarihi</th>
-            <th>Güncelleyen Kullanıcı</th>
             <th>Güncelleme Tarihi</th>
-
+            <th>İşlemler</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var stokhareket in (IEnumerable<STOK_HAREKET>)TempData["stokHareketleri"])
+        @if (TempData["stokHareketleri"] != null)
         {
-            if (stokhareket != null)
+            foreach (var stokhareket in (IEnumerable<STOK_HAREKET>)TempData["stokHareketleri"])
             {
                 <tr>
-                    <td>@stokhareket.HAREKET_ID</td>
-                    <td>@stokhareket.STOK_ID</td>
-                    <td>@stokhareket.DEPO_ESLESTIRME_ID</td>
-                    <td>@stokhareket.SORUMLU_ID</td>
-                    <td>@stokhareket.HAREKET_TIP</td>
+                    <td>@counter</td>
+                    <td>@stokhareket.STOK.STOK_AD</td>
+                    <td>@stokhareket.SORUMLU.SORUMLU_ADI</td>
+                    <td>@stokhareket.DEPO_ESLESTIRME.DEPO.DEPO_ADI</td>
                     <td>@stokhareket.ACIKLAMA</td>
                     <td>@stokhareket.HAREKET_MIKTAR</td>
                     <td>@stokhareket.HAREKET_TARIHI</td>
-                    <td>@stokhareket.OLUSTURAN_KULLANICI</td>
                     <td>@stokhareket.OLUSTURMA_TARIHI</td>
-                    <td>@stokhareket.GUNCELLEYEN_KULLANICI</td>
                     <td>@stokhareket.GUNCELLEME_TARIHI</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Actions
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item text-danger delete-stokHareket" href="#" data-id="@stokhareket.HAREKET_ID">Stok Hareketini Sil</a><br />
-                                @Html.ActionLink("Stok Hareketini Güncelle", "StokHareketGuncelle", "DepoYetkilisi", new { id = stokhareket.DEPO_ESLESTIRME_ID }, null)
-                            </div>
+                    <td class="table-actions">
+                        <div class="action-buttons-container">
+                            <button class="btn btn-primary action-btn" onclick="location.href='@Url.Action("StokHareketGuncelle", "DepoYetkilisi", new { id = stokhareket.STOK_ID })'">Kullanıcı Güncelle</button> 
+                            <button class="btn btn-danger action-btn delete-user" data-id="@stokhareket.STOK_ID">Kullanıcı Sil</button>
                         </div>
                     </td>
                 </tr>
+                counter++;
             }
-            else
-            {
-                ViewBag.ErrorMessage = "Kayıtlı Stok Hareket bulunmamaktadır";
-            }
-
+        }
+        else
+        {
+            <tr>
+                <td colspan="10" class="text-center">Kayıtlı Stok Hareket bulunmamaktadır</td>
+            </tr>
         }
     </tbody>
 </table>
 
+@using (Html.BeginForm("StokHareketiEkle", "DepoYetkilisi", FormMethod.Post))
+{
+    <button type="submit" class="btn btn-primary">+ Stok Hareketi Ekle</button>
+}
+
 @section scripts {
     <script>
-        // Bildirim mesajı
         $(document).ready(function () {
             $('#notification').fadeIn('fast').delay(3000).fadeOut('fast');
-        });
 
-        // Arama kutusuna yazıldığında tabloyu filtrele
-        $(document).on('keyup', '#searchString', function () {
-            var searchText = $(this).val().toLowerCase();
-            $('tbody tr').each(function () {
-                var hareketID = $(this).find('td:nth-child(1)').text().toLowerCase(); // Adjusted to nth-child(1) for Username
-                var stokID = $(this).find('td:nth-child(2)').text().toLowerCase();
-                var esID = $(this).find('td:nth-child(3)').text().toLowerCase();
-                var sorID = $(this).find('td:nth-child(4)').text().toLowerCase();
-                var hareketTIP = $(this).find('td:nth-child(5)').text().toLowerCase();
-                var aciklama = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var hareketMik = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var hareketTAR = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var olusturanKul = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var olusturmaTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var guncelleyenKul = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var guncellemeTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                if (hareketID.includes(searchText) || stokID.includes(searchText) || esID.includes(searchText) || sorID.includes(searchText) || hareketTIP.includes(searchText) || aciklama.includes(searchText) || hareketMik.includes(searchText) || hareketTAR.includes(searchText) || olusturanKul.includes(searchText)
-                    || olusturmaTar.includes(searchText) || guncelleyenKul.includes(searchText) || guncellemeTar.includes(searchText)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
             $('.delete-stokHareket').click(function (e) {
                 e.preventDefault();
-
                 var stockHID = $(this).data('id');
                 var url = '@Url.Action("StokHareketSil", "DepoYetkilisi")' + '?stock=' + stockHID;
 
-                // Confirm dialog
-                if (confirm('Bu Stok Hareketi silmek istediğinizden emin misiniz?')) {
-
-                    $.post(url, function (data) {
-                        // Handle success or refresh the page
-                        location.reload(); // Refresh the page after deletion
+                if (confirm('Bu stok hareketini silmek istediğinizden emin misiniz?')) {
+                    $.post(url, function () {
+                        location.reload();
                     });
                 }
             });
-
         });
-
-
     </script>
 }

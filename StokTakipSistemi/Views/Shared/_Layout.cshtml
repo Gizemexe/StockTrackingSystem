@@ -8,83 +8,90 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+    <style>
+        li {
+            font-size: 16px;    
+        }
+    </style>
 </head>
 <body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
-            <div class="navbar-header">
-                @Html.ActionLink("Stok Takip", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <ul class="nav navbar-nav">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { area = "" })">
+                <img src="~/Content/SASA.png" alt="Logo" style="height: 28px; display: inline-block; vertical-align: middle;">
+                
+            </a>
 
-                @{
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        var roleId = Convert.ToInt32(Session["KulTIP"]);
-                        if (roleId == 1) // Admin
-                        {
+        <ul class="nav navbar-nav">
 
-                            <li>@Html.ActionLink("Anasayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Kullanıcı İşlemleri", "KullaniciSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Depo İşlemleri", "DepoSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Alt Depo İşlemleri", "AltDepoSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Stok İşlemleri", "StokSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
-                                </ul>
-                            </li>
-                        }
-                        else if (roleId == 2) // Depo Yetkilisi
-                        {
-                            <li>@Html.ActionLink("Anasayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            
-                           
-                            
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Depo Yetkilisi<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Kullanıcı İşlemleri", "DepoSayfasi", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Stok Hareket İşlemleri", "StokHareketiSayfasi", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Stok Durum İşlemleri", "StokDurumSayfası", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
-                                </ul>
-                            </li>
-                        }
-                        else if (roleId == 3) // Rapor Kullancisi
-                        {
-                            <li>@Html.ActionLink("Anasayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rapor Kullanicisi<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Kullanıcı İşlemleri", "RaporKulSayfasi", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Stok Hareket İşlemleri", "RaporSayfasi", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link" })</li>
-                                </ul>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink("Admin Girişi", "Login", "Admin", new { area = "" }, new { @class = "nav-link active" })</li>
-                        <li>@Html.ActionLink("Depo Yetkilisi Girişi", "Login", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link active" })</li>
-                        <li>@Html.ActionLink("Rapor Kullanıcısı Girişi", "Login", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link active" })</li>
-                    }
-                }
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                @if (User.Identity.IsAuthenticated)
+            @{
+                if (User.Identity.IsAuthenticated)
                 {
-                    string username = Session["Username"] as string;
-                    int? userId = Convert.ToInt32(Session["KulID"]);
-                    if (!string.IsNullOrEmpty(username) && userId.HasValue)
+                    var roleId = Convert.ToInt32(Session["KulTIP"]);
+                    if (roleId == 1) // Admin
                     {
-                        <li>@Html.ActionLink(username, "Contact", "Home", new { id = userId.Value }, new { @class = "nav-link" })</li>
-                    }
-                    <li>@Html.ActionLink("Log Out", "LogOut", User.IsInRole("Admin") ? "Admin" : "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
-                }
 
-            </ul>
+                        <li>@Html.ActionLink("Anasayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Kullanıcı İşlemleri", "KullaniciSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Depo İşlemleri", "DepoSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Alt Depo İşlemleri", "AltDepoSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Stok İşlemleri", "StokSayfasi", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                            </ul>
+                        </li>
+                    }
+                    else if (roleId == 2) // Depo Yetkilisi
+                    {
+                        <li>@Html.ActionLink("Anasayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Depo Yetkilisi<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Kullanıcı İşlemleri", "DepoSayfasi", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Stok Hareket İşlemleri", "StokHareketiSayfasi", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Stok Durum İşlemleri", "StokDurumSayfası", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
+                            </ul>
+                        </li>
+                    }
+                    else if (roleId == 3) // Rapor Kullancisi
+                    {
+                        <li>@Html.ActionLink("Anasayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rapor Kullanicisi<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Kullanıcı İşlemleri", "RaporKulSayfasi", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Stok Hareket Raporları", "RaporSayfasi", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link" })</li>
+                                <li>@Html.ActionLink("Stok Durum Raporları", "StokDurumSayfasi", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link" })</li>
+                            </ul>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li>@Html.ActionLink("Admin Girişi", "Login", "Admin", new { area = "" }, new { @class = "nav-link active" })</li>
+                    <li>@Html.ActionLink("Depo Yetkilisi Girişi", "Login", "DepoYetkilisi", new { area = "" }, new { @class = "nav-link active" })</li>
+                    <li>@Html.ActionLink("Rapor Kullanıcısı Girişi", "Login", "RaporKullanicisi", new { area = "" }, new { @class = "nav-link active" })</li>
+                }
+            }
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            @if (User.Identity.IsAuthenticated)
+            {
+                string username = Session["Username"] as string;
+                int? userId = Convert.ToInt32(Session["KulID"]);
+                if (!string.IsNullOrEmpty(username) && userId.HasValue)
+                {
+                    <li>@Html.ActionLink(username, "Contact", "Home", new { id = userId.Value }, new { @class = "nav-link" })</li>
+                }
+                <li>@Html.ActionLink("Log Out", "LogOut", User.IsInRole("Admin") ? "Admin" : "DepoYetkilisi", new { area = "" }, new { @class = "nav-link" })</li>
+            }
+
+        </ul>
         </div>
     </nav>
     <br />

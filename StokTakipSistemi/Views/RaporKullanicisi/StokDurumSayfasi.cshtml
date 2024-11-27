@@ -2,11 +2,13 @@
 @model IEnumerable<STOK_DURUM>
 @{
     ViewBag.Title = "Stok Durum Sayfası";
+    int counter = 1;
 }
 
+<!-- Page Title -->
+<h2 class="page-title">Stok Durum Raporu</h2>
 
-<h2>Stok Durum Sayfası</h2>
-
+<!-- Notification for Success or Failure -->
 <div id="notification" class="alert alert-success" style="display: none;">
     @if (TempData["SuccessMessage"] != null)
     {
@@ -18,97 +20,86 @@
     }
 </div>
 
-@using (Html.BeginForm("StokDurumSayfasi", "RaporKullanicisi", FormMethod.Get))
-{
-    <div class="button-container">
-        @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
-    </div>
-}
-
-
-<style>
-
-    .search-input {
-        width: 250px; /* Adjust the width of the input field as needed */
-        margin-right: 5px; /* Optional: Add some space between input field and button */
-    }
-</style>
-
-<br />
-
-@using (Html.BeginForm("ExportToStokDurumExcel", "RaporKullanicisi", FormMethod.Post))
-{
-    <div class="button-container" style="float: right;">
-        <button type="submit" class="btn btn-success">Excel'e Aktar</button>
-    </div>
-}
-
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Durum ID</th>
-            <th>Stok ADI</th>
-            <th>Depo Eşleştirme ID </th>
-            <th>Durum Miktarı </th>
-            <th>Oluşturan Kullanıcı</th>
-            <th>Oluşturma Tarihi</th>
-            <th>Güncelleyen Kullanıcı</th>
-            <th>Güncelleme Tarihi</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var stokdurum in (IEnumerable<STOK_DURUM>)TempData["stokDurum"])
+<!-- Search and Export Section -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        @using (Html.BeginForm("StokDurumSayfası", "DepoYetkilisi", FormMethod.Get))
         {
-            if (stokdurum != null)
-            {
-                <tr>
-                    <td>@stokdurum.DURUM_ID</td>
-                    <td>@stokdurum.STOK.STOK_AD</td>
-                    <td>@stokdurum.DEPO_ESLESTIRME_ID</td>
-                    <td>@stokdurum.DURUM_MIKTAR</td>
-                    <td>@stokdurum.OLUSTURAN_KULLANICI</td>
-                    <td>@stokdurum.OLUSTURMA_TARIHI</td>
-                    <td>@stokdurum.GUNCELLEYEN_KULLANICI</td>
-                    <td>@stokdurum.GUNCELLEME_TARIHI</td>
-                </tr>
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "Kayıtlı Stok Durum bulunmamaktadır";
-            }
-
+            <div class="input-group">
+                @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+    <div class="col-md-6 text-right">
+        @using (Html.BeginForm("ExportToStokDurumExcel", "DepoYetkilisi", FormMethod.Post))
+        {
+            <button type="submit" class="btn btn-primary">Excel'e Aktar</button>
+        }
+    </div>
+</div>
+
+<!-- Table Section -->
+<div class="table-container">
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Stok Adı</th>
+                <th>Depo Adı</th>
+                <th>Durum Miktarı</th>
+                
+                <th>Oluşturma Tarihi</th>
+                
+                <th>Güncelleme Tarihi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stokdurum in (IEnumerable<STOK_DURUM>)TempData["stokDurum"])
+            {
+                if (stokdurum != null)
+                {
+                    <tr>
+                        <td>@counter</td>
+                        <td>@stokdurum.STOK.STOK_AD</td>
+                        <td>@stokdurum.DEPO_ESLESTIRME.DEPO.DEPO_ADI</td>
+                        <td>@stokdurum.DURUM_MIKTAR</td>
+                        
+                        <td>@stokdurum.OLUSTURMA_TARIHI</td>
+                        
+                        <td>@stokdurum.GUNCELLEME_TARIHI</td>
+                    </tr>
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Kayıtlı Stok Durum bulunmamaktadır";
+                }
+            }
+        </tbody>
+    </table>
+</div>
 
 @section scripts {
     <script>
-        // Bildirim mesajı
+        // Display notification message for success or failure
         $(document).ready(function () {
             $('#notification').fadeIn('fast').delay(3000).fadeOut('fast');
         });
 
-        // Arama kutusuna yazıldığında tabloyu filtrele
+        // Search functionality for table rows
         $(document).on('keyup', '#searchString', function () {
             var searchText = $(this).val().toLowerCase();
             $('tbody tr').each(function () {
-                var hareketID = $(this).find('td:nth-child(1)').text().toLowerCase(); // Adjusted to nth-child(1) for Username
-                var stokID = $(this).find('td:nth-child(2)').text().toLowerCase();
-                var esID = $(this).find('td:nth-child(3)').text().toLowerCase();
-                var sorID = $(this).find('td:nth-child(4)').text().toLowerCase();
-                var hareketTIP = $(this).find('td:nth-child(5)').text().toLowerCase();
-                var aciklama = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var hareketMik = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var hareketTAR = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var olusturanKul = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var olusturmaTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var guncelleyenKul = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var guncellemeTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                if (hareketID.includes(searchText) || stokID.includes(searchText) || esID.includes(searchText) || sorID.includes(searchText) || hareketTIP.includes(searchText) || aciklama.includes(searchText) || hareketMik.includes(searchText) || hareketTAR.includes(searchText) || olusturanKul.includes(searchText)
-                    || olusturmaTar.includes(searchText) || guncelleyenKul.includes(searchText) || guncellemeTar.includes(searchText)) {
+                var columns = $(this).find('td');
+                var rowContainsText = false;
+
+                columns.each(function (index, column) {
+                    var cellText = $(column).text().toLowerCase();
+                    if (cellText.includes(searchText)) {
+                        rowContainsText = true;
+                    }
+                });
+
+                if (rowContainsText) {
                     $(this).show();
                 } else {
                     $(this).hide();
@@ -117,3 +108,85 @@
         });
     </script>
 }
+
+<style>
+    /* General Page Styling */
+    .page-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .input-group {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .table-container {
+        margin-top: 30px;
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            color: #555;
+        }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .alert {
+        font-size: 16px;
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        padding: 15px;
+        border-radius: 4px;
+    }
+
+    .btn-primary, .btn-outline-secondary {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        border-radius: 4px;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-outline-secondary {
+        border: 1px solid #ccc;
+        background-color: white;
+        color: #333;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #f8f9fa;
+        }
+</style>

@@ -1,157 +1,211 @@
 ﻿@using StokTakipSistemi.Models
 @model IEnumerable<STOK_DURUM>
 @{
-    ViewBag.Title = "StokDurumSayfası";
+    ViewBag.Title = "Stok Durum Sayfası";
+    int counter = 1;
 }
 
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Title Section -->
+            <div class="text-center mb-4">
+                <h2 class="display-4 text-primary">Stok Durum Yönetimi</h2>
+                <p class="lead text-muted">Stoklarınızı verimli bir şekilde yönetin ve izleyin.</p>
+            </div>
 
-<h2>Stok Durum Sayfası</h2>
+            <!-- Notification -->
+            @if (TempData["SuccessMessage"] != null || TempData["FailMessage"] != null)
+            {
+                <div id="notification" class="alert alert-dismissible fade show">
+                    @(TempData["SuccessMessage"] ?? TempData["FailMessage"])
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
 
-<div id="notification" class="alert alert-success" style="display: none;">
-    @if (TempData["SuccessMessage"] != null)
-    {
-        @TempData["SuccessMessage"]
-    }
-    else
-    {
-        @TempData["FailMessage"]
-    }
+            <!-- Search Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            @using (Html.BeginForm("StokDurumSayfası", "DepoYetkilisi", FormMethod.Get))
+            {
+                <input type="text" id="searchString" name="searchString" placeholder="Stok adı veya depo adı ile ara..." class="form-control shadow-sm" style="max-width: 400px;" />
+            }
+
+            @using (Html.BeginForm("ExportToStokDurumExcel", "DepoYetkilisi", FormMethod.Post))
+            {
+                <button type="submit" class="btn btn-success shadow-sm">
+                    <i class="bi bi-file-earmark-excel"></i> Excel'e Aktar
+                </button>
+            }
+        
+        </div>
+
+            <!-- Table Section -->
+            <div class="card shadow-sm">
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>#</th>
+                                <th>Stok Adı</th>
+                                <th>Depo Adı</th>
+                                <th>Durum Miktarı</th>
+                                <th>Oluşturma Tarihi</th>
+                                <th>Güncelleme Tarihi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var stokdurum in Model)
+                            {
+                                <tr>
+                                    <td>@counter</td>
+                                    <td>@stokdurum.STOK.STOK_AD</td>
+                                    <td>@stokdurum.DEPO_ESLESTIRME.DEPO.DEPO_ADI</td>
+                                    <td>@stokdurum.DURUM_MIKTAR</td>
+                                    <td>@stokdurum.OLUSTURMA_TARIHI</td>
+                                    <td>@stokdurum.GUNCELLEME_TARIHI</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-outline-danger btn-sm delete-stokDurum" data-id="@stokdurum.DURUM_ID">
+                                                <i class="bi bi-trash"></i> Sil
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                counter++;
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">Kayıtlı Stok Durumu bulunmamaktadır.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <!-- Add Stok Durum Button -->
+            <div class="text-center mt-4">
+                @using (Html.BeginForm("StokDurumEkle", "DepoYetkilisi", FormMethod.Get))
+                {
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                        <i class="bi bi-plus-circle"></i> Yeni Stok Durumu Ekle
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
-@using (Html.BeginForm("StokDurumSayfası", "DepoYetkilisi", FormMethod.Get))
-{
-    <div class="button-container">
-        @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
-    </div>
-}
 
-@using (Html.BeginForm("StokDurumEkle", "DepoYetkilisi", FormMethod.Get))
-{
-    <div class="button-container" style="float: left;">
-        <button type="submit" class="btn btn-success">Stok Durum Ekle</button>
-    </div>
-}
-
-<style>
-
-    .search-input {
-        width: 250px; /* Adjust the width of the input field as needed */
-        margin-right: 5px; /* Optional: Add some space between input field and button */
-    }
-</style>
-
-<br />
-
-@using (Html.BeginForm("ExportToStokDurumExcel", "DepoYetkilisi", FormMethod.Post))
-{
-    <div class="button-container" style="float: right;">
-        <button type="submit" class="btn btn-success">Excel'e Aktar</button>
-    </div>
-}
-
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Durum ID</th>
-            <th>Stok ADI</th>
-            <th>Depo Eşleştirme ID </th>
-            <th>Durum Miktarı </th>
-            <th>Oluşturan Kullanıcı</th>
-            <th>Oluşturma Tarihi</th>
-            <th>Güncelleyen Kullanıcı</th>
-            <th>Güncelleme Tarihi</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var stokdurum in (IEnumerable<STOK_DURUM>)TempData["stokDurum"])
-        {
-            if (stokdurum != null)
-            {
-                <tr>
-                    <td>@stokdurum.DURUM_ID</td>
-                    <td>@stokdurum.STOK.STOK_AD</td>
-                    <td>@stokdurum.DEPO_ESLESTIRME_ID</td>                   
-                    <td>@stokdurum.DURUM_MIKTAR</td>                 
-                    <td>@stokdurum.OLUSTURAN_KULLANICI</td>
-                    <td>@stokdurum.OLUSTURMA_TARIHI</td>
-                    <td>@stokdurum.GUNCELLEYEN_KULLANICI</td>
-                    <td>@stokdurum.GUNCELLEME_TARIHI</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Actions
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item text-danger delete-stokDurum" href="#" data-id="@stokdurum.DURUM_ID">Stok Hareketini Sil</a><br />
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "Kayıtlı Stok Durum bulunmamaktadır";
-            }
-
-        }
-    </tbody>
-</table>
-
-@section scripts {
+@section Scripts {
     <script>
-        // Bildirim mesajı
         $(document).ready(function () {
+            // Notification fade in/out
             $('#notification').fadeIn('fast').delay(3000).fadeOut('fast');
-        });
 
-        // Arama kutusuna yazıldığında tabloyu filtrele
-        $(document).on('keyup', '#searchString', function () {
-            var searchText = $(this).val().toLowerCase();
-            $('tbody tr').each(function () {
-                var hareketID = $(this).find('td:nth-child(1)').text().toLowerCase(); // Adjusted to nth-child(1) for Username
-                var stokID = $(this).find('td:nth-child(2)').text().toLowerCase();
-                var esID = $(this).find('td:nth-child(3)').text().toLowerCase();
-                var sorID = $(this).find('td:nth-child(4)').text().toLowerCase();
-                var hareketTIP = $(this).find('td:nth-child(5)').text().toLowerCase();
-                var aciklama = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var hareketMik = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var hareketTAR = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var olusturanKul = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var olusturmaTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var guncelleyenKul = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var guncellemeTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                if (hareketID.includes(searchText) || stokID.includes(searchText) || esID.includes(searchText) || sorID.includes(searchText) || hareketTIP.includes(searchText) || aciklama.includes(searchText) || hareketMik.includes(searchText) || hareketTAR.includes(searchText) || olusturanKul.includes(searchText)
-                    || olusturmaTar.includes(searchText) || guncelleyenKul.includes(searchText) || guncellemeTar.includes(searchText)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
+            // Search functionality
+            $('#searchString').on('keyup', function () {
+                var searchText = $(this).val().toLowerCase();
+                $('tbody tr').each(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1);
+                });
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
+
+            // Delete functionality with confirmation
             $('.delete-stokDurum').click(function (e) {
                 e.preventDefault();
-
                 var stockDID = $(this).data('id');
                 var url = '@Url.Action("StokDurumSil", "DepoYetkilisi")' + '?stock=' + stockDID;
 
-                // Confirm dialog
-                if (confirm('Bu Stok Hareketi silmek istediğinizden emin misiniz?')) {
-
-                    $.post(url, function (data) {
-                        // Handle success or refresh the page
+                if (confirm('Bu Stok Durumunu silmek istediğinizden emin misiniz?')) {
+                    $.post(url, function () {
                         location.reload(); // Refresh the page after deletion
                     });
                 }
             });
-
         });
-
-
     </script>
 }
+
+<style>
+    body {
+        background-color: #f4f7fa;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table-primary {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .btn-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+        font-size: 14px;
+    }
+
+        .btn-primary:hover {
+            background-color: #1f6394;
+            border-color: #1f6394;
+        }
+
+
+    /* Düzenleme: Buton ve Arama Kutusu Hizalama */
+    .d-flex {
+        align-items: center;
+    }
+
+    /* "Yeni Stok Durumu Ekle" butonunun sola hizalanması */
+    .mt-4 {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    /* Tablo içeriği ve butonların yerleşimi */
+    .table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    /* Arama kutusunun genişliği */
+    #searchString {
+        max-width: 400px;
+    }
+
+    /* Excel butonunun hizalanması */
+    .btn-success {
+        white-space: nowrap;
+        position:relative;
+        margin-left:840px;
+    }
+
+</style>

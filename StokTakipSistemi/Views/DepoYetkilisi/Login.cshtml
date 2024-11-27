@@ -3,38 +3,115 @@
     ViewBag.Title = "Depo Yetkilisi Login";
 }
 
-<h2>Depo Yetkilisi Girişi</h2>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depo Yetkilisi Giriş</title>
+    <style>
+        /* Sayfayı tam ekran yap ve ortala */
+        html, body {
+            height: 700px;
+            margin-left: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f6f8;
+            font-family: Arial, sans-serif;
+        }
 
-@using (Html.BeginForm("Login", "DepoYetkilisi", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+        /* Login kutusu stilleri */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
 
-    <div class="form-group">
-        <label style="font-size:16px;"><b>Username</b></label>
+            /* Başlık ve giriş kutusu stilleri */
+            .login-container h2 {
+                font-size: 24px;
+                color: #005f73;
+                margin-bottom: 20px;
+            }
 
-        @Html.TextBoxFor(m => m.KUL_USERNAME, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.KUL_USERNAME, "", new { @class = "text-danger" })
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+            .form-group label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 5px;
+                display: inline-block;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #005f73;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #0a9396;
+            }
+
+        .alert-danger {
+            color: #ff0000;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Depo Yetkilisi Girişi</h2>
+        @using (Html.BeginForm("Login", "DepoYetkilisi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="username">Kullanıcı Adı</label>
+                @Html.TextBoxFor(m => m.KUL_USERNAME, new { @class = "form-control", @placeholder = "Kullanıcı adınızı girin" })
+                @Html.ValidationMessageFor(m => m.KUL_USERNAME, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="password">Şifre</label>
+                @Html.PasswordFor(m => m.KUL_SIFRE, new { @class = "form-control", @placeholder = "Şifrenizi girin" })
+                @Html.ValidationMessageFor(model => model.KUL_SIFRE, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+
+            if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+        }
     </div>
 
-    <div class="form-group">
-        <label style="font-size:16px;"><b>Şifre</b></label>
-
-        @Html.PasswordFor(m => m.KUL_SIFRE, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.KUL_SIFRE, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group">
-
-        <label style="font-size:16px;"><b> </b></label>
-    </div>
-    <div class="form-group">
-
-        <button type="submit" class="btn btn-primary">Giriş Yap</button>
-    </div>
-    if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-    {
-        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-    }
-}
-
-
+</body>
+</html>

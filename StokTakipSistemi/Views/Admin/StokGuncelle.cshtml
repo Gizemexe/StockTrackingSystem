@@ -3,113 +3,195 @@
     ViewBag.Title = "Stok Güncelle";
 }
 
-<body>
-    <br />
-    <br />
-    <br />
-    @using (Html.BeginForm("StokGuncelle", "Admin", FormMethod.Post))
-    {
-        @Html.HiddenFor(x => x.STOK_ID)
-
-        <div style="margin-bottom:295px">
-            <h2 style="margin-left:155px; font-size:30px;"><b>Depo</b></h2>
-            <br />
-            <table class="tbl">
-                <tr>
-                    <th>
-                        <label style="font-size:14px">Stok Adı: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.STOK_AD, new { @class = "form-control", @placeholder = "Stok Adı..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Statu: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.STATU, new { @class = "form-control", @placeholder = "Statu..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Olcu Birimi: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.STOK_OLCUBIRIM, new { @class = "form-control", @placeholder = "Stok Olcubirimi..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Stok Marka: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.STOK_MARKA, new { @class = "form-control",  @placeholder = "Marka..." })
-                    </td>
-                </tr> <tr>
-                    <th>
-                        <label style="font-size: 14px">Stok Detay: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.STOK_DETAY, new { @class = "form-control", @placeholder = "Stok Detay..." })
-                    </td>
-                </tr> <tr>
-                    <th>
-                        <label style="font-size: 14px">Kayıt Tarihi: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.KAYIT_TARIHI, new { @class = "form-control",  @placeholder = "Kayıt Tarihi..." })
-                    </td>
-                </tr><tr>
-                    <th>
-                        <label style="font-size: 14px">Min Miktar: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.MIN_MIKTAR, new { @class = "form-control",  @placeholder = "Min Miktar..." })
-                    </td>
-                </tr><tr>
-                    <th>
-                        <label style="font-size: 14px">Olusturan Kullanıcı: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.OLUSTURAN_KULLANICI, new { @class = "form-control", @readonly = true, @placeholder = "Olusturan Kullanıcı..." })
-                    </td>
-                </tr><tr>
-                    <th>
-                        <label style="font-size: 14px">Olusturma Tarihi: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.OLUSTURMA_TARIHI, new { @class = "form-control", @readonly = true, @placeholder = "Olusturma Tarihi..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size: 14px">Guncelleyen Kullanici: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.GUNCELLEYEN_KULLANICI, new { @class = "form-control", @readonly = true, @placeholder = "Guncelleyen Kullanici..." })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <label style="font-size:14px">Guncelleme Tarihi: </label>
-                    </th>
-                    <td>
-                        @Html.TextBoxFor(x => x.GUNCELLEME_TARIHI, new { @class = "form-control", @readonly = true, @placeholder = "Guncelleme Tarihi..." })
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <br />
-                        <input type="submit" value="Update" class="btn btn-danger" />
-                    </td>
-                    <td>
-                        <br />
-                        <button class="btn btn-warning" onclick="location.href='@Url.Action("StokSayfasi", "Admin")'; return false;">Cancel</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
+<!-- CSS Kodu -->
+<style>
+    /* Genel Ayarlar */
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Roboto', sans-serif;
+        color: #333;
     }
-</body>
+
+    /* Kart Tasarımı */
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    /* Kart Başlığı */
+    .card-header {
+        font-size: 1.8rem; /* Başlık boyutunu büyüttük */
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Form Elemanları */
+    .form-control {
+        font-size: 1.1rem; /* Form alanlarının yazı boyutunu artırdık */
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Etiketler */
+    .form-label {
+        font-size: 1.2rem; /* Etiketlerin yazı boyutunu büyüttük */
+        color: #495057;
+    }
+
+    /* Butonlar */
+    .btn {
+        font-size: 1rem; /* Butonların yazı boyutunu küçülttük */
+        padding: 0.8rem 1.5rem; /* Butonların boyutlarını küçülttük */
+        border-radius: 8px;
+        font-weight: 500;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #28a745;
+        transform: scale(1.02); /* Hafif büyüme efekti */
+    }
+
+    .btn-secondary:hover {
+        background-color: #6c757d;
+        transform: scale(1.02);
+    }
+
+    /* Responsive */
+    media (max-width: 768px) {
+        .form-control {
+            font-size: 1rem;
+        }
+
+        .btn {
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+        }
+    }
+</style>
+
+<!-- Razor Kodu -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Stok Güncelle</h3>
+                </div>
+                <div class="card-body p-4">
+                    @using (Html.BeginForm("StokGuncelle", "Admin", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(x => x.STOK_ID)
+
+                        <div class="row g-4">
+                            <!-- Stok Adı -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.STOK_AD, "Stok Adı", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.STOK_AD, new { @class = "form-control", @placeholder = "Stok Adı Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Statu -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.STATU, "Statü", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.STATU, new { @class = "form-control", @placeholder = "Statü Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Ölçü Birimi -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.STOK_OLCUBIRIM, "Ölçü Birimi", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.STOK_OLCUBIRIM, new { @class = "form-control", @placeholder = "Ölçü Birimi Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Marka -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.STOK_MARKA, "Marka", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.STOK_MARKA, new { @class = "form-control", @placeholder = "Marka Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Stok Detay -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.STOK_DETAY, "Stok Detay", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.STOK_DETAY, new { @class = "form-control", @placeholder = "Detay Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Kayıt Tarihi -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.KAYIT_TARIHI, "Kayıt Tarihi", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.KAYIT_TARIHI, new { @class = "form-control", @placeholder = "Kayıt Tarihi Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Min Miktar -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.MIN_MIKTAR, "Min Miktar", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.MIN_MIKTAR, new { @class = "form-control", @placeholder = "Min Miktar Giriniz" })
+                                </div>
+                            </div>
+
+                            <!-- Oluşturan Kullanıcı -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.OLUSTURAN_KULLANICI, "Oluşturan Kullanıcı", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.OLUSTURAN_KULLANICI, new { @class = "form-control", @readonly = true })
+                                </div>
+                            </div>
+
+                            <!-- Oluşturma Tarihi -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.OLUSTURMA_TARIHI, "Oluşturma Tarihi", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.OLUSTURMA_TARIHI, new { @class = "form-control", @readonly = true })
+                                </div>
+                            </div>
+
+                            <!-- Güncelleyen Kullanıcı -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.GUNCELLEYEN_KULLANICI, "Güncelleyen Kullanıcı", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.GUNCELLEYEN_KULLANICI, new { @class = "form-control", @readonly = true })
+                                </div>
+                            </div>
+
+                            <!-- Güncelleme Tarihi -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.GUNCELLEME_TARIHI, "Güncelleme Tarihi", new { @class = "form-label fw-bold" })
+                                    @Html.TextBoxFor(x => x.GUNCELLEME_TARIHI, new { @class = "form-control", @readonly = true })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Butonlar -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-save"></i> Kaydet
+                            </button>
+                            <button type="button" class="btn btn-secondary px-4" onclick="location.href='@Url.Action("StokSayfasi", "Admin")';">
+                                <i class="bi bi-x-circle"></i> İptal
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

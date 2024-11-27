@@ -3,58 +3,141 @@
     ViewBag.Title = "Stok Ekle";
 }
 
-<h2>Stok Ekle</h2>
-
-@using (Html.BeginForm("StokEkle", "Admin", FormMethod.Post))
-{
-    @Html.ValidationSummary(true)
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.STOK_AD)
-        @Html.TextBoxFor(model => model.STOK_AD, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.STOK_AD)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.STOK_OLCUBIRIM)
-        @Html.TextBoxFor(model => model.STOK_OLCUBIRIM, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.STOK_OLCUBIRIM)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.STOK_MARKA)
-        @Html.TextBoxFor(model => model.STOK_MARKA, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.STOK_MARKA)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.STOK_DETAY)
-        @Html.TextBoxFor(model => model.STOK_DETAY, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.STOK_DETAY)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.KAYIT_TARIHI)
-        @Html.TextBoxFor(model => model.KAYIT_TARIHI, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.KAYIT_TARIHI)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.STATU)
-        @Html.TextBoxFor(model => model.STATU, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.STATU)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.MIN_MIKTAR)
-        @Html.TextBoxFor(model => model.MIN_MIKTAR, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.MIN_MIKTAR)
-    </div>
-
-    if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-    {
-        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+<!-- CSS -->
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Roboto', sans-serif;
+        color: #333;
     }
 
-    <button type="submit" class="btn btn-primary">Stok Ekle</button>
-}
+    h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        font-size: 1.2rem; /* Etiket yazı boyutunu büyüttük */
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .form-control {
+        font-size: 1.1rem; /* Form alanlarının yazı boyutunu büyüttük */
+        border-radius: 8px;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn-primary {
+        font-size: 1.1rem;
+        padding: 0.8rem 1.5rem;
+        border-radius: 6px;
+    }
+
+    .btn-warning {
+        font-size: 1.1rem;
+        padding: 0.8rem 1.5rem;
+        border-radius: 6px;
+    }
+
+        .btn-primary:hover, .btn-warning:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease;
+        }
+
+    .text-danger {
+        font-size: 0.9rem; /* Hata mesajlarını daha okunabilir hale getirdik */
+    }
+
+    .container {
+        max-width: 800px;
+    }
+</style>
+
+<!-- Razor Kodu -->
+<div class="container my-5">
+    <h2 class="text-center text-primary">STOK EKLEME SAYFASI</h2>
+
+    @using (Html.BeginForm("StokEkle", "Admin", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- Hata Mesajı -->
+        if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger mt-3">@ViewBag.ErrorMessage</div>
+        }
+
+        <!-- Form -->
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <!-- Stok Adı -->
+                    <div class="col-md-6">
+                        <label>Stok Adı</label>
+                        @Html.TextBoxFor(model => model.STOK_AD, new { @class = "form-control", @placeholder = "Stok Adı Giriniz" })
+                        @Html.ValidationMessageFor(model => model.STOK_AD, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Stok Ölçü Birimi -->
+                    <div class="col-md-6">
+                        <label>Stok Ölçü Birimi</label>
+                        @Html.TextBoxFor(model => model.STOK_OLCUBIRIM, new { @class = "form-control", @placeholder = "Ölçü Birimi Giriniz" })
+                        @Html.ValidationMessageFor(model => model.STOK_OLCUBIRIM, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Stok Markası -->
+                    <div class="col-md-6">
+                        <label>Stok Markası</label>
+                        @Html.TextBoxFor(model => model.STOK_MARKA, new { @class = "form-control", @placeholder = "Marka Giriniz" })
+                        @Html.ValidationMessageFor(model => model.STOK_MARKA, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Stok Detayı -->
+                    <div class="col-md-6">
+                        <label>Stok Detayı</label>
+                        @Html.TextBoxFor(model => model.STOK_DETAY, new { @class = "form-control", @placeholder = "Detay Giriniz" })
+                        @Html.ValidationMessageFor(model => model.STOK_DETAY, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Kayıt Tarihi -->
+                    <div class="col-md-6">
+                        <label>Kayıt Tarihi</label>
+                        @Html.TextBoxFor(model => model.KAYIT_TARIHI, new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(model => model.KAYIT_TARIHI, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Statü -->
+                    <div class="col-md-6">
+                        <label>Statü</label>
+                        @Html.TextBoxFor(model => model.STATU, new { @class = "form-control", @placeholder = "Statü Giriniz" })
+                        @Html.ValidationMessageFor(model => model.STATU, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Minimum Miktar -->
+                    <div class="col-md-6">
+                        <label>Minimum Miktar</label>
+                        @Html.TextBoxFor(model => model.MIN_MIKTAR, new { @class = "form-control", @placeholder = "Minimum Miktar Giriniz" })
+                        @Html.ValidationMessageFor(model => model.MIN_MIKTAR, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+                <!-- Butonlar -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bi bi-plus-circle"></i> Stok Ekle
+                    </button>
+                    <button class="btn btn-warning" onclick="location.href='@Url.Action("StokSayfasi", "Admin")'; return false;">
+                        <i class="bi bi-x-circle"></i> İptal Et
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

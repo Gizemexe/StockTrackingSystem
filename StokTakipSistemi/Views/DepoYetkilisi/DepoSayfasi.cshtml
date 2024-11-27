@@ -1,11 +1,148 @@
-﻿
-@using StokTakipSistemi.Models
+﻿@using StokTakipSistemi.Models
 @model IEnumerable<KULLANICI>
 @{
     ViewBag.Title = "Kullanıcı Listesi";
+    int counter = 1;
 }
 
-<h2>Kullanıcı Listesi</h2>
+<style>
+    .page-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #005f73;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .action-buttons {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .action-buttons-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .action-btn {
+        margin-right: 10px; /* Butonlar arasına boşluk ekler */
+    }
+
+        .action-btn:last-child {
+            margin-right: 0; /* Son butonun sağ tarafında boşluk bırakmaz */
+        }
+
+
+    .btn-primary {
+        background-color: #005f73; /* Mavi buton için renk */
+        border-color: #005f73; /* Kenar rengi */
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9396; /* Hover (üzerine gelince) rengi */
+            border-color: #0a9396; /* Hover kenar rengi */
+        }
+
+    .btn-danger {
+        background-color: #d9534f; /* Kırmızı buton için renk */
+        border-color: #d9534f; /* Kenar rengi */
+    }
+
+        .btn-danger:hover {
+            background-color: #c9302c; /* Hover rengi */
+            border-color: #c9302c; /* Hover kenar rengi */
+        }
+
+    .search-container {
+        flex: 1;
+        max-width: 600px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 12px 15px;
+            font-size: 1.1em;
+        }
+
+        .table th {
+            background-color: #005f73;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e0f7fa;
+    }
+
+    .table-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        min-width: 150px;
+    }
+
+    .action-button {
+        margin-right: 10px;
+    }
+
+    .notification-message {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .delete-button {
+        color: #bb3e03;
+        font-weight: bold;
+    }
+
+    .update-button {
+        color: #0a9396;
+        font-weight: bold;
+    }
+
+    .btn-success {
+        background-color: #28a745; /* Yeşil buton için renk */
+        border-color: #28a745; /* Kenar rengi */
+    }
+
+        .btn-success:hover {
+            background-color: #218838; /* Hover rengi */
+            border-color: #1e7e34; /* Hover kenar rengi */
+        }
+</style>
+
+<h2 class="page-title">Kullanıcı Listesi</h2>
 
 <div id="notification" class="alert alert-success" style="display: none;">
     @if (TempData["SuccessMessage"] != null)
@@ -18,129 +155,104 @@
     }
 </div>
 
-@using (Html.BeginForm("DepoSayfasi", "DepoYetkilisi", FormMethod.Get))
-{
-    <div class="button-container">
-        @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
-    </div>
-}
-
-<style>
-
-    .search-input {
-        width: 250px; /* Adjust the width of the input field as needed */
-        margin-right: 5px; /* Optional: Add some space between input field and button */
+<div class="action-buttons">
+    @using (Html.BeginForm("DepoSayfasi", "DepoYetkilisi", FormMethod.Get))
+    {
+        <div class="search-container">
+            @Html.TextBox("searchString", null, new { @class = "form-control search-input", placeholder = "Tabloda arayın" })
+        </div>
     }
-</style>
-
-<br />
-
-@using (Html.BeginForm("KullaniciEkleDepo", "DepoYetkilisi", FormMethod.Post))
-{
-    <div class="button-container" style="float: left;">
-        <button type="submit" class="btn btn-success">Kullanıcıyı Ekle</button>
-    </div>
-}
-
-@using (Html.BeginForm("ExportToExcel", "DepoYetkilisi", FormMethod.Post))
-{
-    <div class="button-container" style="float: right;">
-        <button type="submit" class="btn btn-success">Excel'e Aktar</button>
-    </div>
-}
 
 
 
-<table class="table">
+    @using (Html.BeginForm("ExportToExcel", "DepoYetkilisi", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn-success action-btn">Excel'e Aktar</button>
+    }
+</div>
+
+<table class="table table-striped table-hover">
     <thead>
         <tr>
+            <th></th>
             <th>Username</th>
             <th>Ad</th>
             <th>Soyad</th>
             <th>Statu</th>
-            <th>Oluşturan Kullanıcı</th>
             <th>Oluşturma Tarihi</th>
-            <th>Güncelleyen Kullanıcı</th>
             <th>Güncelleme Tarihi</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in (IEnumerable<KULLANICI>)TempData["Kullanicilar"])
         {
             <tr>
+                <td>@counter</td>
                 <td>@user.KUL_USERNAME</td>
                 <td>@user.KUL_AD</td>
                 <td>@user.KUL_SOYAD</td>
-                <td>@user.STATU</td>
-                <td>@user.OLUSTURAN_KULLANICI</td>
+                <td>@(user.STATU.HasValue && user.STATU.Value ? "Aktif" : "Aktif Değil")</td>
                 <td>@user.OLUSTURMA_TARIHI</td>
-                <td>@user.GUNCELLEYEN_KULLANICI</td>
                 <td>@user.GUNCELLEME_TARIHI</td>
-                <td>@user.KUL_ID</td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Actions
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item text-danger delete-user" href="#" data-id="@user.KUL_ID">Kullanıcı Sil</a><br />
-                            @Html.ActionLink("Kullanıcı Güncelle", "DepoKullanıcıGüncelle", "DepoYetkilisi", new { id = user.KUL_ID }, null)
-                        </div>
+                <td class="table-actions">
+                    <div class="action-buttons-container">
+                        <button class="btn btn-primary action-btn" onclick="location.href='@Url.Action("DepoKullanıcıGüncelle", "DepoYetkilisi", new { id = user.KUL_ID })'">Kullanıcı Güncelle</button>
+                        <button class="btn btn-danger action-btn delete-user" data-id="@user.KUL_ID">Kullanıcı Sil</button>
                     </div>
                 </td>
             </tr>
+            counter++; 
         }
+
     </tbody>
 </table>
 
+@using (Html.BeginForm("KullaniciEkleDepo", "DepoYetkilisi", FormMethod.Post))
+{
+    <button type="submit" class="btn btn-primary">Kullanıcıyı Ekle</button>
+}
+
+
 @section scripts {
     <script>
-        // Bildirim mesajı
         $(document).ready(function () {
             $('#notification').fadeIn('fast').delay(3000).fadeOut('fast');
-        });
 
-        // Arama kutusuna yazıldığında tabloyu filtrele
-        $(document).on('keyup', '#searchString', function () {
-            var searchText = $(this).val().toLowerCase();
-            $('tbody tr').each(function () {
-                var username = $(this).find('td:nth-child(1)').text().toLowerCase(); // Adjusted to nth-child(1) for Username
-                var ad = $(this).find('td:nth-child(2)').text().toLowerCase();
-                var soyad = $(this).find('td:nth-child(3)').text().toLowerCase();
-                var statu = $(this).find('td:nth-child(4)').text().toLowerCase();
-                var olKul = $(this).find('td:nth-child(5)').text().toLowerCase();
-                var olTar = $(this).find('td:nth-child(6)').text().toLowerCase();
-                var gunKul = $(this).find('td:nth-child(7)').text().toLowerCase();
-                var gunTar = $(this).find('td:nth-child(8)').text().toLowerCase();
-                if (username.includes(searchText) || ad.includes(searchText) || soyad.includes(searchText) 
-                    || statu.includes(searchText) || olKul.includes(searchText) || olTar.includes(searchText) || gunKul.includes(searchText) || gunTar.includes(searchText)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
             $('.delete-user').click(function (e) {
                 e.preventDefault();
 
                 var userId = $(this).data('id');
                 var url = '@Url.Action("KullanıcıSil", "DepoYetkilisi")' + '?user=' + userId;
 
-                // Confirm dialog
                 if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
-                    // AJAX request to delete user
                     $.post(url, function (data) {
-                        // Handle success or refresh the page
-                        location.reload(); // Refresh the page after deletion
+                        location.reload();
                     });
                 }
             });
 
+            // Arama kutusuna yazıldığında tabloyu filtrele
+            $(document).on('keyup', '#searchString', function () {
+                var searchText = $(this).val().toLowerCase();
+                $('tbody tr').each(function () {
+                    var username = $(this).find('td:nth-child(1)').text().toLowerCase();
+                    var ad = $(this).find('td:nth-child(2)').text().toLowerCase();
+                    var soyad = $(this).find('td:nth-child(3)').text().toLowerCase();
+                    var statu = $(this).find('td:nth-child(4)').text().toLowerCase();
+                    var olKul = $(this).find('td:nth-child(5)').text().toLowerCase();
+                    var olTar = $(this).find('td:nth-child(6)').text().toLowerCase();
+                    var gunKul = $(this).find('td:nth-child(7)').text().toLowerCase();
+                    var gunTar = $(this).find('td:nth-child(8)').text().toLowerCase();
+                    if (username.includes(searchText) || ad.includes(searchText) || soyad.includes(searchText)
+                        || statu.includes(searchText) || olKul.includes(searchText) || olTar.includes(searchText)
+                        || gunKul.includes(searchText) || gunTar.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
         });
-
-
     </script>
 }

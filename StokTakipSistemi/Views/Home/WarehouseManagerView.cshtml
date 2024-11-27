@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "WarehouseManagerView";
+    var username = Session["username"] ?? "Depo Yetkilisi";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sasa Stok Takip Sistemi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+
+        header {
+            background-color: #005f73;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .hero-section {
+            position: relative;
+            background-color: #005f73; 
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+            .hero-overlay h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .hero-overlay p {
+                font-size: 1.2em;
+                line-height: 1.6;
+            }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+            .section:hover {
+                transform: translateY(-5px);
+            }
+
+            .section h2 {
+                color: #000;
+                font-size: 1.8em;
+                margin-bottom: 15px;
+                border-bottom: 2px solid #000;
+                padding-bottom: 5px;
+            }
+
+            .section p {
+                font-size: 1em;
+                color: #333;
+            }
+
+        footer {
+            background-color: #005f73;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="hero-overlay">
+            <h1>@username, Hoş Geldiniz!</h1>
+            <p>Yarım asırlık deneyimimizle sağlık, tekstil, otomotiv ve ambalaj alanında hammadde üretiyoruz.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>Stok Hareket İşlemleri</h2>
+            <p>Burada stok hareket bilgilerini güncelleyebilir ve takip edebilirsiniz.</p>
+        </div>
+        <div class="section">
+            <h2>Stok Durum</h2>
+            <p>Depoda bulunan ürünler ve stok durumları hakkında bilgiye buradan ulaşabilirsiniz.</p>
+        </div>
+        <div class="section">
+            <h2>Raporlama</h2>
+            <p>Günlük, haftalık ve aylık raporlarınızı burada görüntüleyebilirsiniz.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Sasa Stok Takip Sistemi - Tüm hakları saklıdır.
+    </footer>
+
+</body>
+</html>

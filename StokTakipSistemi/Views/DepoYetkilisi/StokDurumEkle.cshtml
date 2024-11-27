@@ -3,31 +3,95 @@
     ViewBag.Title = "Stok Durum Ekle";
 }
 
+<h2 class="text-center text-primary mt-4 mb-5">Stok Durum Ekle</h2>
 
-@using (Html.BeginForm("StokDurumEkleF", "DepoYetkilisi", FormMethod.Post))
-{
-    @Html.ValidationSummary(true)
-    <h2>StokDurumEkle</h2>
+<div class="container">
+    <div class="card rounded-3 shadow-lg" style="background-color: #f8f9fa;">
+        
+        <div class="card-body p-4">
+            @using (Html.BeginForm("StokDurumEkleF", "DepoYetkilisi", FormMethod.Post))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.STOK_ID, "Stok")
-        @Html.DropDownList("STOK_ID", ViewBag.Stoklar as SelectList, "-- Stok Seçiniz --", new { @class = "form-control" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.STOK_ID, "Stok", new { @class = "control-label" })
+                    @Html.DropDownList("STOK_ID", ViewBag.Stoklar as SelectList, "-- Stok Seçiniz --", new { @class = "form-control rounded-pill" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DEPO_ESLESTIRME_ID, "Depo Eşleştirme", new { @class = "control-label" })
+                    @Html.DropDownList("DEPO_ESLESTIRME_ID", ViewBag.Eslesmeler as SelectList, "-- Depo Eşleştirme ID Seçiniz --", new { @class = "form-control rounded-pill" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DURUM_MIKTAR, "Durum Miktarı", new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.DURUM_MIKTAR, new { @class = "form-control rounded-pill" })
+                </div>
+
+                if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3">@ViewBag.ErrorMessage</div>
+                }
+
+                <button type="submit" class="btn btn-success btn-lg btn-block mt-4">Stok Durum Ekle</button>
+                <button type="submit" class="btn btn-warning btn-lg btn-block mt-4" onclick="location.href='@Url.Action("StokDurumSayfası", "DepoYetkilisi")'; return false;">İptal Et</button>
+            }
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.DEPO_ESLESTIRME_ID, "Depo Eşleştirme")
-        @Html.DropDownList("DEPO_ESLESTIRME_ID", ViewBag.Eslesmeler as SelectList, "-- Depo Eşleştirme Seçiniz --", new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.DURUM_MIKTAR, "Durum Miktarı") <br />
-        @Html.TextBoxFor(model => model.DURUM_MIKTAR, new { htmlAttributes = new { @class = "form-control" } })
-    </div>
- 
-
-        if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-        {
-            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-        }
-        <button type="submit" class="btn btn-primary">Stok Durum Ekle</button>
+<style>
+    .container {
+        max-width: 700px;
+        margin-top: 50px;
     }
+
+    h2 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        border-radius: 15px 15px 0 0;
+
+    }
+
+    .form-control {
+        font-size: 15px;
+        padding: 5px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .rounded-pill {
+        border-radius: 50px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+        font-size: 14px;
+    }
+</style>

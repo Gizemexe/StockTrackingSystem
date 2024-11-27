@@ -88,6 +88,7 @@ namespace StokTakipSistemi.Controllers
 
             return View();
         }
+
         [HttpPost]
         public ActionResult StokHareketiKaydet(STOK_HAREKET hareket, int STOK_ID, int DEPO_ESLESTIRME_ID, int SORUMLU_ID)
         {

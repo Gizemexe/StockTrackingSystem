@@ -314,6 +314,7 @@
     <Content Include="Views\DepoYetkilisi\StokDurumEkle.cshtml" />
     <Content Include="Views\DepoYetkilisi\StokDurumSayfası.cshtml" />
     <Content Include="Views\RaporKullanicisi\StokDurumSayfasi.cshtml" />
+    <Content Include="Views\Home\WarehouseManagerView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -96,7 +96,7 @@
     </tbody>
 </table>
 
-@using (Html.BeginForm("Depo_AltDepo_Ekle", "Admin", FormMethod.Post))
+@using (Html.BeginForm("AltDepoEkle", "Admin", FormMethod.Post))
 {
     <div class="button-container">
         <button type="submit" class="btn btn-success">Eşleşme Ekle</button>
@@ -104,7 +104,7 @@
 }
 
 @section scripts {
-    <script>
+    <script> 
         // Bildirim mesajı
         $(document).ready(function () {
             $('#notification').fadeIn('fast').delay(3000).fadeOut('fast');
